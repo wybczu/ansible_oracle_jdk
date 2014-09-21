@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/wybczu/ansible_oracle_jdk.svg?branch=master)](https://travis-ci.org/wybczu/ansible_oracle_jdk)
+
 oracle_jdk
 ==========
 
