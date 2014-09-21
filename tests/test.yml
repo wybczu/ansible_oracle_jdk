@@ -1,0 +1,4 @@
+- hosts: localhost
+  remote_user: root
+  roles:
+    - { role: oracle_jdk, oracle_jdk_version: '8u5-b13' }
