@@ -26,7 +26,6 @@ script:
   # testing java 8 installation (default)
   - >
     test "$( basename $( readlink /usr/lib/jvm/java-8-oracle ) )" == "java-8-oracle-${JAVA8_VERSION}" ||
-    exit 1
     ( echo 'Wrong symlink' && exit 1)
 
   - >
