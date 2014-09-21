@@ -16,7 +16,20 @@ install:
 script:
   - ansible-playbook -i localhost, tests/test.yml --syntax-check
   - ansible-playbook -i localhost, tests/test.yml --connection=local
+
   - >
-    ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo | 
+    ansible-playbook -i localhost, tests/test.yml --connection=local | 
     grep -q 'changed=0.*failed=0' && 
     (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+
+  # testing java 8 installation (default)
+  - >
+    source /usr/lib/jvm/java-8-oracle/release &&
+    test "$( java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" || 
+    exit 1
+  
+  # testing java 7 installation
+  - >
+    source /usr/lib/jvm/java-7-oracle/release &&
+    test "$( /usr/lib/jvm/java-7-oracle/jre/bin/java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" || 
+    exit 1
