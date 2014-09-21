@@ -6,7 +6,7 @@ Role installs Oracle JDK in specified version and updates alternatives.
 Role Variables
 --------------
 
- * `oracle_jdk_version` - JDK version with build number e.g. 8u5-b13, 6u45b06
+ * `oracle_jdk_version` - JDK version with build number e.g. *8u5-b13*, *6u45b06*
  * `oracle_jdk_not_default` - if not set role will update system alternatives
 
 Example Playbook
