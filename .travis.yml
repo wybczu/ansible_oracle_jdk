@@ -3,8 +3,8 @@
 language: python
 python: "2.7"
 
--env:
-  - ANSIBLE_ROLES_PATH="./../"
+env:
+  - ANSIBLE_ROLES_PATH=../
 
 before_install:
   - sudo apt-get update -qq
@@ -16,3 +16,4 @@ install:
 script:
   - ansible-playbook -i localhost, tests/test.yml --syntax-check
   - ansible-playbook -i localhost, tests/test.yml --connection=local
+
