@@ -1,4 +1,4 @@
 - hosts: localhost
-  remote_user: root
+  sudo: yes
   roles:
     - { role: ansible_oracle_jdk, oracle_jdk_version: '8u5-b13' }
