@@ -27,13 +27,15 @@ script:
   - >
     test "$( basename $( readlink /usr/lib/jvm/java-8-oracle ) )" == "java-8-oracle-${JAVA8_VERSION}" ||
     exit 1
+    ( echo 'Wrong symlink' && exit 1)
+
   - >
     source /usr/lib/jvm/java-8-oracle/release &&
     test "$( java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" ||
-    exit 1
+    ( echo 'Version mismatch' && exit 1)
     
   # testing java 7 installation
   - >
     source /usr/lib/jvm/java-7-oracle-${JAVA7_VERSION}/release &&
     test "$( /usr/lib/jvm/java-7-oracle-${JAVA7_VERSION}/jre/bin/java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" ||
-    exit 1
+    ( echo 'Version mismatch' && exit 1)
