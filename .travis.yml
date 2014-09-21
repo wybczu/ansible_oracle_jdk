@@ -5,10 +5,11 @@ python: "2.7"
 
 env:
   - ANSIBLE_ROLES_PATH=../
+  - JAVA7_VERSION="7u67-b01"
+  - JAVA8_VERSION="8u5-b13"
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y curl
 
 install:
   - pip install ansible
@@ -16,7 +17,6 @@ install:
 script:
   - ansible-playbook -i localhost, tests/test.yml --syntax-check
   - ansible-playbook -i localhost, tests/test.yml --connection=local
-
   - >
     ansible-playbook -i localhost, tests/test.yml --connection=local | 
     grep -q 'changed=0.*failed=0' && 
@@ -24,13 +24,15 @@ script:
 
   # testing java 8 installation (default)
   - >
+    test "$( basename $( readlink /usr/lib/jvm/java-8-oracle ) )" == "${JAVA8_VERSION}" ||
+    exit 1
+  - >
     source /usr/lib/jvm/java-8-oracle/release &&
-    test "$( java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" || 
-    (echo 'Java 8 version mismatch' && exit 1)
+    test "$( java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" ||
+    exit 1
     
-  
   # testing java 7 installation
   - >
-    source /usr/lib/jvm/java-7-oracle/release &&
-    test "$( /usr/lib/jvm/java-7-oracle/jre/bin/java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" || 
-    (echo 'Java 7 version mismatch' && exit 1)
+    source /usr/lib/jvm/java-7-oracle-${JAVA7_VERSION}/release &&
+    test "$( /usr/lib/jvm/java-7-oracle-${JAVA7_VERSION}/jre/bin/java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" ||
+    exit 1
