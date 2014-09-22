@@ -4,10 +4,13 @@ language: python
 python: "2.7"
 
 env:
+
   global:
     - ANSIBLE_ROLES_PATH=../
-    - JAVA7_VERSION="7u67-b01"
-    - JAVA8_VERSION="8u5-b13"
+
+  matrix:
+    - JDK_VERSION="7u67-b01" JAVA_VERSION="1.7.0_67" DEFAULT_VERSION="true"
+    - JDK_VERSION="8u5-b13" JAVA_VERSION="1.8.0_05" DEFAULT_VERSION="false"
 
 before_install:
   - sudo apt-get update -qq
@@ -23,18 +26,18 @@ script:
     grep -q 'changed=0.*failed=0' && 
     (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
 
-  # testing java 8 installation (default)
   - >
-    test "$( basename $( readlink /usr/lib/jvm/java-8-oracle ) )" == "java-8-oracle-${JAVA8_VERSION}" ||
-    ( echo 'Wrong symlink' && exit 1)
+    test "${DEFAULT_VERSION}" == "true" &&
+    (
+        test "$( basename $( readlink /usr/lib/jvm/java-${JDK_VERSION:0:1}-oracle ) )" == "java-${JDK_VERSION:0:1}-oracle-${JDK_VERSION}" ||
+        ( echo 'Wrong symlink' && exit 1)
+    )
 
   - >
-    source /usr/lib/jvm/java-8-oracle/release &&
-    test "$( java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" ||
-    ( echo 'Version mismatch' && exit 1)
+    test "${DEFAULT_VERSION}" == "true" &&
+    export JAVA_BIN=/usr/bin/java ||
+    export JAVA_BIN=java-${JDK_VERSION:0:1}-oracle-${JDK_VERSION}/jre/bin/java
     
-  # testing java 7 installation
   - >
-    source /usr/lib/jvm/java-7-oracle-${JAVA7_VERSION}/release &&
-    test "$( /usr/lib/jvm/java-7-oracle-${JAVA7_VERSION}/jre/bin/java -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" ||
+    test "$( ${JAVA_BIN} -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" ||
     ( echo 'Version mismatch' && exit 1)
