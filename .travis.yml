@@ -37,7 +37,7 @@ script:
   - >
     if [[ "${DEFAULT_VERSION}" == "true" ]]; then
     test "$( basename $( readlink /usr/lib/jvm/java-${JDK_VERSION:0:1}-oracle ) )" == "java-${JDK_VERSION:0:1}-oracle-${JDK_VERSION}" ||
-    ( echo 'Wrong symlink' && exit 1) )
+    ( echo 'Wrong symlink' && exit 1)
     fi
 
   - >
