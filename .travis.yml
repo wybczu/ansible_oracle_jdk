@@ -20,11 +20,19 @@ install:
 
 script:
   - ansible-playbook -i localhost, tests/test.yml --syntax-check
+
   - ansible-playbook -i localhost, tests/test.yml --connection=local
+
   - >
     ansible-playbook -i localhost, tests/test.yml --connection=local | 
     grep -q 'changed=0.*failed=0' && 
     (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+
+
+  - >
+    test "${DEFAULT_VERSION}" == "true" && (
+    test -h /usr/lib/jvm/java-${JDK_VERSION:0:1}-oracle ||
+    ( echo 'Symlink to default JDK does not exists' && exit 1) )
 
   - >
     test "${DEFAULT_VERSION}" == "true" && (
