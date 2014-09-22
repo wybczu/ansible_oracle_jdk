@@ -9,8 +9,8 @@ env:
     - ANSIBLE_ROLES_PATH=../
 
   matrix:
-    - JDK_VERSION="7u67-b01" JAVA_VERSION="1.7.0_67" DEFAULT_VERSION="true"
-    - JDK_VERSION="8u5-b13" JAVA_VERSION="1.8.0_05" DEFAULT_VERSION="false"
+    - JDK_VERSION="7u67-b01" JAVA_VERSION="1.7.0_67" DEFAULT_VERSION="false"
+    - JDK_VERSION="8u5-b13" JAVA_VERSION="1.8.0_05" DEFAULT_VERSION="true"
 
 before_install:
   - sudo apt-get update -qq
@@ -27,7 +27,6 @@ script:
     ansible-playbook -i localhost, tests/test.yml --connection=local | 
     grep -q 'changed=0.*failed=0' && 
     (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
-
 
   - >
     test "${DEFAULT_VERSION}" == "true" && (
