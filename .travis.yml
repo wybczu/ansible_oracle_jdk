@@ -27,11 +27,9 @@ script:
     (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
 
   - >
-    test "${DEFAULT_VERSION}" == "true" &&
-    (
-        test "$( basename $( readlink /usr/lib/jvm/java-${JDK_VERSION:0:1}-oracle ) )" == "java-${JDK_VERSION:0:1}-oracle-${JDK_VERSION}" ||
-        ( echo 'Wrong symlink' && exit 1)
-    )
+    test "${DEFAULT_VERSION}" == "true" && (
+    test "$( basename $( readlink /usr/lib/jvm/java-${JDK_VERSION:0:1}-oracle ) )" == "java-${JDK_VERSION:0:1}-oracle-${JDK_VERSION}" ||
+    ( echo 'Wrong symlink' && exit 1) )
 
   - >
     test "${DEFAULT_VERSION}" == "true" &&
