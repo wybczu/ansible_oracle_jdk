@@ -43,7 +43,7 @@ script:
   - >
     test "${DEFAULT_VERSION}" == "true" &&
     export JAVA_BIN=/usr/bin/java ||
-    export JAVA_BIN=java-${JDK_VERSION:0:1}-oracle-${JDK_VERSION}/jre/bin/java
+    export JAVA_BIN=/usr/lib/jvm/java-${JDK_VERSION:0:1}-oracle-${JDK_VERSION}/jre/bin/java
     
   - >
     test "$( ${JAVA_BIN} -version 2>&1 | sed -rn 's/java version "([0-9._]*)"/\1/p' )" == "${JAVA_VERSION}" ||
